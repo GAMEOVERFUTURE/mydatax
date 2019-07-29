@@ -1,0 +1,155 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+<!-- 	<parent>
+		<groupId>com.iapppay</groupId>
+		<artifactId>settlement</artifactId>
+		<version>2.4.0</version>
+	 </parent> -->
+	<groupId>com.iapppay</groupId>
+	<artifactId>sp_datax</artifactId>
+	<packaging>jar</packaging>
+	<version>2.4.0-SNAPSHOT</version>
+	
+    <!-- maven仓库地址 -->
+	<repositories>
+		<repository>
+			<id>newpublic</id>
+			<url>http://192.168.0.140:4444/content/groups/newpublic/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<datax.version>0.0.1-SNAPSHOT</datax.version>
+		<spring-boot.version>1.5.21.RELEASE</spring-boot.version>
+	    <commons.httpclient.version>3.1</commons.httpclient.version>
+		<commons.email.version>1.3.2</commons.email.version>
+		<commons.pool.version>1.5.6</commons.pool.version>
+		<commons.pool2.version>2.4.3</commons.pool2.version>
+		<commons.cli.version>1.2</commons.cli.version>
+		<commons.configuration.version>1.7</commons.configuration.version>
+		<commons.net.version>3.3</commons.net.version>
+		<commons.collections.version>3.2.1</commons.collections.version>
+		<commons.fileupload.version>1.2.2</commons.fileupload.version>
+		<commons.io.version>2.0.1</commons.io.version>
+		<commons.lang.version>2.6</commons.lang.version>
+		<commons.lang3.version>3.4</commons.lang3.version>
+		<commons.beanutils.version>1.8.0</commons.beanutils.version>
+		<mybatis-spring-boot-starter.version>1.3.4</mybatis-spring-boot-starter.version>
+		<mysql-connector-java.version>5.1.47</mysql-connector-java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <encoding>UTF-8</encoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- Import dependency management from Spring Boot (依赖管理：继承一些默认的依赖，工程需要依赖的jar包的管理，申明其他dependency的时候就不需要version) -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.iapppay</groupId>
+			<artifactId>sp_mongo</artifactId>
+			<version>2.4.7</version>
+			<exclusions>
+			  <exclusion>
+			     <groupId>redis.clients</groupId>
+			     <artifactId>jedis</artifactId>
+			  </exclusion>
+			</exclusions>
+		</dependency>
+		<!-- spring-boot-starter-web (spring-webmvc + tomcat) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.datax</groupId>
+			<artifactId>datax-core</artifactId>
+			<version>${datax.version}</version>
+		</dependency>
+		
+        <!-- mybatis-starter：mybatis + mybatis-spring + tomcat-jdbc（default） -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>${mybatis-spring-boot-starter.version}</version>
+		</dependency>
+		<!-- mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector-java.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+		    <version>2.1.6.RELEASE</version>
+       </dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- spring-boot-maven-plugin (提供了直接运行项目的插件：如果是通过parent方式继承spring-boot-starter-parent则不用此插件) -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+	       <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+           </plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+							<goal>single</goal>
+						</goals>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+	</build>
+</project>

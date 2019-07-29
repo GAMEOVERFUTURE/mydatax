@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration>
+
+<configuration scan="true" scanPeriod="1 seconds">
+	<contextName>sp_datax</contextName>
+	<!-- audi模块存放日志文件路径 -->
+	<property name="Log_Home" value="${basedir}/logs/sp_datax/" />
+	
+	<!-- run级别-->
+	<appender name="runLogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<File>${Log_Home}/run/run.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				${Log_Home}/run/run.%d{yyyy-MM-dd}.%i.log
+			</FileNamePattern>
+			<MaxHistory>36500</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>2MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{MM-dd HH:mm:ss.SSS} %t %logger%n                       %level：%msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	
+	<!-- debug级别 -->
+	<appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<File>${Log_Home}/debug/debug.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				${Log_Home}/debug/debug.%d{yyyy-MM-dd-HH}.%i.log
+			</FileNamePattern>
+			<MaxHistory>720</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>2MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{MM-dd HH:mm:ss.SSS} %t %logger%n                       %level：%msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+	<!-- error级别-->
+	<appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<File>${Log_Home}/error/error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				${Log_Home}/error/error.%d{yyyy-MM-dd-HH}.%i.log
+			</FileNamePattern>
+			<MaxHistory>720</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>2MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{MM-dd HH:mm:ss.SSS} %t %logger%n                       %level：%msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- 数据库日志 -->
+	<appender name="JDBC" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${Log_Home}/jdbc/jdbc.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				${Log_Home}/jdbc/jdbc.%d{yyyy-MM-dd}.%i.log
+			</FileNamePattern>
+			<MaxHistory>720</MaxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>2MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{MM-dd HH:mm:ss.SSS} %t %logger%n                       %level：%msg%n</Pattern>
+		</encoder>
+	</appender>
+	
+   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 日志输出编码 -->
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n</pattern>
+		</layout>
+	</appender>
+	
+	<!-- 当前日志总级别为debug -->
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<!-- 其他第三方日志 -->
+	<logger name="org.mongodb.driver" level="off"/>
+</configuration>

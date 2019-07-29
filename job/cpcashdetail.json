@@ -1,0 +1,56 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                "byte":10485760
+            },
+            "errorLimit": {
+                "record": 0,
+                "percentage": 0.02
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "mongodbreader",
+                    "path":"${datax.home}/plugin/reader/mongodbreader",
+                    "parameter": {
+                        "address": ["${mongoDBAddress}"],
+				        "userName": "${userName}",
+				        "userPassword": "${userPassword}",
+				        "dbName": "${dbName}",
+				        "array": "${array}",
+				        "query":"{${query}}",
+				        "billno": "${billno}",
+				        "batchSize":5000,
+				        "isCp":"${isCp}",
+				        "collectionName": "bd_cpcash_detail_${month}",
+                        "column" : [{
+                                "name": "billno",
+                                "type": "string"
+                            },
+                            {
+                                "name": "finishtime",
+                                "type": "date"
+                            }],
+                        "sliceRecordCount": 100000
+                    }
+                },
+                "writer": {
+                        "name": "txtfilewriter",
+                        "path":"${datax.home}/plugin/writer/txtfilewriter",
+					    "parameter": {
+					        "path": "${filepath}",
+					        "fileName": "${fileName}",
+					        "writeMode": "truncate",
+					        "dateFormat": "yyyyMMdd HH:mm:ss",
+				            "print": false,
+                            "encoding": "utf-8",
+                            "fieldDelimiter": "\t",
+                            "header":[${fileHeader}]
+                     }
+                }
+            }
+        ]
+    }
+}
